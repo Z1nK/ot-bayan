@@ -44,6 +44,13 @@ find_package(GTest QUIET)
     endif()
 endif()
 
+if(WITH_BOOST)
+find_package(Boost REQUIRED COMPONENTS system filesystem)
+    if(NOT Boost_FOUND)
+        message(FATAL_ERROR "Boost library not found")
+    endif()
+endif()
+
 
 # -----------------------------------------------------------------------------
 # Generating config files
