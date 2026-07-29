@@ -1,0 +1,101 @@
+#include "bayan.hpp"
+#include <cli-parser/cli-parser.hpp>
+#include <iostream>
+#include <version/version.hpp>
+
+
+Bayan::Bayan()
+{
+}
+
+BayanOptions Bayan::extractOptions(const po::variables_map& vm)
+{
+    BayanOptions options;
+
+    options.show_help = vm.count("help") > 0;
+
+    if (vm.count("scan")) {
+        options.scan_dirs = vm["scan"].as<std::vector<std::string>>();
+    }
+
+    if (vm.count("exclude")) {
+        options.exclude_dirs = vm["exclude"].as<std::vector<std::string>>();
+    }
+
+    options.depth = vm["depth"].as<size_t>();
+    options.min_size = vm["min-size"].as<uint64_t>();
+
+    if (vm.count("mask")) {
+        options.masks = vm["mask"].as<std::vector<std::string>>();
+    }
+
+    options.block_size = vm["block-size"].as<size_t>();
+    options.hash_algorithm = vm["hash"].as<std::string>();
+
+    return options;
+}
+
+void Bayan::printOptions(const BayanOptions& options) const
+{
+    std::cout << "Bayan - File Duplicate Finder" << std::endl;
+    std::cout << "==============================" << std::endl;
+
+    std::cout << "Scan directories: ";
+    for (const auto& dir : options.scan_dirs) {
+        std::cout << dir << " ";
+    }
+    std::cout << std::endl;
+
+    if (!options.exclude_dirs.empty()) {
+        std::cout << "Exclude directories: ";
+        for (const auto& dir : options.exclude_dirs) {
+            std::cout << dir << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << "Scan depth: " << options.depth << std::endl;
+    std::cout << "Minimum file size: " << options.min_size << " bytes" << std::endl;
+
+    if (!options.masks.empty()) {
+        std::cout << "File masks: ";
+        for (const auto& mask : options.masks) {
+            std::cout << mask << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << "Block size: " << options.block_size << std::endl;
+    std::cout << "Hash algorithm: " << options.hash_algorithm << std::endl;
+}
+
+void Bayan::run(int argc, char* argv[])
+{
+    CliParser parser;
+    po::variables_map vm = parser.parse(argc, argv);
+
+    if (vm.count("help")) {
+        parser.printHelp();
+        return;
+    }
+
+    if (vm.count("version")) {
+        std::cout << bayan::version_string() << std::endl;
+        return;
+    }
+
+    BayanOptions options = extractOptions(vm);
+
+    if (options.scan_dirs.empty()) {
+        std::cerr << "Error: At least one scan directory must be specified with --scan" << std::endl;
+        parser.printHelp();
+        return;
+    }
+
+    printOptions(options);
+
+    // TODO: Implement actual duplicate finding logic here
+}
+
+
+
