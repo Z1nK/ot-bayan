@@ -9,7 +9,7 @@ add_library(cli-parser::cli-parser ALIAS ${LOCAL_LIB_NAME})
 
 target_include_directories(${LOCAL_LIB_NAME} PUBLIC
   $<INSTALL_INTERFACE:include>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../..>
   )
 
 target_link_libraries(${LOCAL_LIB_NAME} PUBLIC 

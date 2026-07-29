@@ -1,6 +1,8 @@
 #include "cli-parser.hpp"
 #include <iostream>
-#include <version/version.hpp>
+#include <bayan/version/version.hpp>
+
+namespace bayan {
 
 CliParser::CliParser() : options_desc("Allowed options") {
   options_desc.add_options()
@@ -31,3 +33,5 @@ po::variables_map CliParser::parse(int argc, char *argv[]) {
 }
 
 void CliParser::printHelp() const { std::cout << options_desc << std::endl; }
+
+} // namespace bayan

@@ -6,7 +6,7 @@
 int main(int argc, char* argv[])
 {
     try {
-        Bayan bayan;
+        bayan::Bayan bayan;
         bayan.run(argc, argv);
         return 0;
     } catch (const std::exception& e) {

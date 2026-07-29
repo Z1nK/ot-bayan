@@ -6,6 +6,8 @@
 
 namespace po = boost::program_options;
 
+namespace bayan {
+
 class CliParser {
 public:
     CliParser();
@@ -15,3 +17,5 @@ public:
 private:
     po::options_description options_desc;
 };
+
+} // namespace bayan
