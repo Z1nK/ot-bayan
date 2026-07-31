@@ -1,16 +1,19 @@
 #pragma once
+#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
 #include <cstdint>
 #include <string>
 #include <vector>
 
-namespace po = boost::program_options;
+
 namespace bayan {
 
+namespace fs = boost::filesystem;
+namespace po = boost::program_options;
 struct BayanOptions {
-  std::vector<std::string> scan_dirs;
-  std::vector<std::string> exclude_dirs;
+  std::vector<fs::path> scan_dirs;
+  std::vector<fs::path> exclude_dirs;
   size_t depth;
   uint64_t min_size;
   std::vector<std::string> masks;

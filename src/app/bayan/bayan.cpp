@@ -16,11 +16,13 @@ BayanOptions Bayan::extractOptions(const po::variables_map& vm) {
   options.show_help = vm.count("help") > 0;
 
   if (vm.count("scan")) {
-    options.scan_dirs = vm["scan"].as<std::vector<std::string>>();
+    const auto& scan_dirs = vm["scan"].as<std::vector<std::string>>();
+    options.scan_dirs.assign(scan_dirs.begin(), scan_dirs.end());
   }
 
   if (vm.count("exclude")) {
-    options.exclude_dirs = vm["exclude"].as<std::vector<std::string>>();
+    const auto& exclude_dirs = vm["exclude"].as<std::vector<std::string>>();
+    options.exclude_dirs.assign(exclude_dirs.begin(), exclude_dirs.end());
   }
 
   options.depth = vm["depth"].as<size_t>();
@@ -42,14 +44,14 @@ void Bayan::printOptions(const BayanOptions& options) const {
 
   std::cout << "Scan directories: ";
   for (const auto& dir : options.scan_dirs) {
-    std::cout << dir << " ";
+    std::cout << dir.string() << " ";
   }
   std::cout << std::endl;
 
   if (!options.exclude_dirs.empty()) {
     std::cout << "Exclude directories: ";
     for (const auto& dir : options.exclude_dirs) {
-      std::cout << dir << " ";
+      std::cout << dir.string() << " ";
     }
     std::cout << std::endl;
   }
