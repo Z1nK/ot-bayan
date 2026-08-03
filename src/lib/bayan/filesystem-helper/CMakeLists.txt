@@ -3,6 +3,7 @@ set(LOCAL_LIB_NAME filesystem-helper)
 add_library(${LOCAL_LIB_NAME} 
   file_finder.cpp
   file_finder.hpp
+  file_obj.hpp
 )
 
 add_library(bayan::filesystem-helper ALIAS ${LOCAL_LIB_NAME})
