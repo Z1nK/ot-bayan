@@ -1,16 +1,16 @@
-#include <gtest/gtest.h>
-#include <array>
-#include <cstdint>
-
 #include "bayan/hash/crc32.hpp"
 #include "bayan/hash/md5.hpp"
+
+#include <gtest/gtest.h>
+
+#include <array>
+#include <cstdint>
 
 // --- crc32 ---
 
 TEST(Crc32, SameInputSameOutput) {
   const char data[] = "hello";
-  EXPECT_EQ(bayan::crc32(data, sizeof(data) - 1),
-            bayan::crc32(data, sizeof(data) - 1));
+  EXPECT_EQ(bayan::crc32(data, sizeof(data) - 1), bayan::crc32(data, sizeof(data) - 1));
 }
 
 TEST(Crc32, DifferentInputDifferentOutput) {
@@ -30,8 +30,7 @@ TEST(Crc32, EmptyInput) {
 
 TEST(Md5, SameInputSameOutput) {
   const char data[] = "hello";
-  EXPECT_EQ(bayan::md5(data, sizeof(data) - 1),
-            bayan::md5(data, sizeof(data) - 1));
+  EXPECT_EQ(bayan::md5(data, sizeof(data) - 1), bayan::md5(data, sizeof(data) - 1));
 }
 
 TEST(Md5, DifferentInputDifferentOutput) {
