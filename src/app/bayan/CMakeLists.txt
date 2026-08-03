@@ -7,6 +7,7 @@ target_sources(bayan PRIVATE bayan.cpp main.cpp)
 target_link_libraries(bayan PRIVATE
     cli-parser::cli-parser
     bayan::project-version
+    bayan::filesystem-helper
     Boost::filesystem
 )
 

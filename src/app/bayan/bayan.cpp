@@ -1,6 +1,7 @@
 #include "bayan.hpp"
 
 #include <bayan/cli-parser/cli-parser.hpp>
+#include <bayan/filesystem-helper/file_finder.hpp>
 
 #include <bayan/version/version.hpp>
 
@@ -96,6 +97,12 @@ void Bayan::run(int argc, char* argv[]) {
   printOptions(options);
 
   // TODO: Implement actual duplicate finding logic here
+  FileFinder finder;
+  finder.AddScanDir(options.scan_dirs)
+        .AddExcludeDir(options.exclude_dirs)
+        .SetScanDepth(options.depth)
+        .SetMinFileSize(options.min_size)
+        .AddMask(options.masks);
 }
 
 }  // namespace bayan
