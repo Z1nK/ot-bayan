@@ -103,6 +103,12 @@ void Bayan::run(int argc, char* argv[]) {
         .SetScanDepth(options.depth)
         .SetMinFileSize(options.min_size)
         .AddMask(options.masks);
+
+  std::vector<fs::path> files = finder.Find();  // This will return the list of files, but we are not using it yet.
+
+  for (const auto& file : files) {
+    std::cout << "Found file: " << file.string() << std::endl;
+  }
 }
 
 }  // namespace bayan
