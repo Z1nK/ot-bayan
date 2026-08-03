@@ -3,6 +3,7 @@ set(LOCAL_LIB_NAME filesystem-helper)
 add_library(${LOCAL_LIB_NAME} 
   file_finder.cpp
   file_finder.hpp
+  file_obj.cpp
   file_obj.hpp
 )
 
