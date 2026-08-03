@@ -1,8 +1,9 @@
 #pragma once
 
+#include <boost/uuid/detail/md5.hpp>
+
 #include <array>
 #include <cstdint>
-#include <boost/uuid/detail/md5.hpp>
 
 namespace bayan {
 
