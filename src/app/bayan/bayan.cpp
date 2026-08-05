@@ -2,6 +2,7 @@
 
 #include <bayan/cli-parser/cli-parser.hpp>
 #include <bayan/filesystem-helper/file_finder.hpp>
+#include <bayan/filesystem-helper/file_obj.hpp>
 
 #include <bayan/version/version.hpp>
 
@@ -99,15 +100,15 @@ void Bayan::run(int argc, char* argv[]) {
   // TODO: Implement actual duplicate finding logic here
   FileFinder finder;
   finder.AddScanDir(options.scan_dirs)
-        .AddExcludeDir(options.exclude_dirs)
-        .SetScanDepth(options.depth)
-        .SetMinFileSize(options.min_size)
-        .AddMask(options.masks);
+      .AddExcludeDir(options.exclude_dirs)
+      .SetScanDepth(options.depth)
+      .SetMinFileSize(options.min_size)
+      .AddMask(options.masks);
 
-  std::vector<fs::path> files = finder.Find();  // This will return the list of files, but we are not using it yet.
+  std::vector<FileObj> files = finder.Find();
 
   for (const auto& file : files) {
-    std::cout << "Found file: " << file.string() << std::endl;
+    std::cout << "Found file: " << file.getPath().string() << std::endl;
   }
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "file_obj.hpp"
+
 #include <boost/filesystem.hpp>
 #include <boost/functional/hash.hpp>
 
@@ -44,7 +46,7 @@ public:
   FileFinder& SetMinFileSize(std::uint64_t min_bytes);
 
   // --- Execution ---
-  std::vector<fs::path> Find() const;
+  std::vector<FileObj> Find() const;
 
 private:
   std::vector<fs::path> scan_dirs_;
@@ -63,7 +65,7 @@ private:
 
   static std::string WildcardToRegex(const std::string& pattern);
 
-  void ScanDirectory(const fs::path& root_path, std::vector<fs::path>& result) const;
+  void ScanDirectory(const fs::path& root_path, std::vector<FileObj>& result) const;
 };
 
 }  // namespace bayan
