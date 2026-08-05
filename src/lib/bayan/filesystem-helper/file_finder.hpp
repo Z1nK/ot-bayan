@@ -2,6 +2,8 @@
 
 #include "file_obj.hpp"
 
+#include <bayan/hash/hash.hpp>
+
 #include <boost/filesystem.hpp>
 #include <boost/functional/hash.hpp>
 
@@ -46,6 +48,8 @@ public:
 
   FileFinder& SetMinFileSize(std::uint64_t min_bytes);
 
+  FileFinder& SetHashAlgorithm(HashAlgorithm algorithm);
+
   // --- Execution ---
   std::vector<FileObj> Find() const;
 
@@ -55,6 +59,7 @@ private:
   std::unordered_set<fs::path, boost::hash<fs::path>> exclude_paths_;
   std::vector<std::regex> mask_regexes_;
   std::size_t block_size_ = 4096;
+  HashAlgorithm hash_algorithm_ = HashAlgorithm::CRC32;
 
   std::size_t scan_depth_ = 0;
   std::uint64_t min_file_size_bytes_ = 0;
@@ -67,7 +72,8 @@ private:
 
   static std::string WildcardToRegex(const std::string& pattern);
 
-  void ScanDirectory(const fs::path& root_path, std::vector<FileObj>& result) const;
+  void ScanDirectory(const fs::path& root_path, const HashFunction& hash_function,
+                      std::vector<FileObj>& result) const;
 };
 
 }  // namespace bayan

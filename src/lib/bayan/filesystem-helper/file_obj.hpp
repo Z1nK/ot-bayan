@@ -13,7 +13,7 @@ namespace fs = boost::filesystem;
 
 class FileObj {
 public:
-  FileObj(const fs::path& path, uint64_t size, size_t blockSize);
+  FileObj(const fs::path& path, uint64_t size, size_t blockSize, HashFunction hashFunction);
 
   const fs::path& getPath() const;
   uint64_t getSize() const;
@@ -27,6 +27,7 @@ private:
   fs::path path_;
   uint64_t size_;
   size_t blockSize_;
+  HashFunction hashFunction_;
 
   HashValue readAndComputeHash(size_t blockIndex) const;
 

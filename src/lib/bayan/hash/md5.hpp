@@ -7,7 +7,7 @@
 
 namespace bayan {
 
-std::array<uint32_t, 4> md5(const char* data, size_t size) {
+inline std::array<uint32_t, 4> md5(const char* data, size_t size) {
   boost::uuids::detail::md5 hash;
   hash.process_bytes(data, size);
   boost::uuids::detail::md5::digest_type digest;

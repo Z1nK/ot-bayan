@@ -5,8 +5,20 @@
 #include "md5.hpp"
 
 #include <stdexcept>
+#include <string>
 
 namespace bayan {
+
+inline HashAlgorithm ParseHashAlgorithm(const std::string& name) {
+  if (name == "crc32") {
+    return HashAlgorithm::CRC32;
+  }
+  if (name == "md5") {
+    return HashAlgorithm::MD5;
+  }
+
+  throw std::invalid_argument("Unsupported hash algorithm: " + name);
+}
 
 inline HashFunction MakeHashFunction(HashAlgorithm algorithm) {
   switch (algorithm) {

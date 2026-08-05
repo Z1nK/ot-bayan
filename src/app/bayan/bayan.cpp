@@ -3,6 +3,7 @@
 #include <bayan/cli-parser/cli-parser.hpp>
 #include <bayan/filesystem-helper/file_finder.hpp>
 #include <bayan/filesystem-helper/file_obj.hpp>
+#include <bayan/hash/hash_factory.hpp>
 
 #include <bayan/version/version.hpp>
 
@@ -105,7 +106,8 @@ void Bayan::run(int argc, char* argv[]) {
       .SetScanDepth(options.depth)
       .SetMinFileSize(options.min_size)
       .AddMask(options.masks)
-      .SetBlockSize(options.block_size);
+      .SetBlockSize(options.block_size)
+      .SetHashAlgorithm(ParseHashAlgorithm(options.hash_algorithm));
 
   std::vector<FileObj> files = finder.Find();
 

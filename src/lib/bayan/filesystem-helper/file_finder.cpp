@@ -1,5 +1,7 @@
 #include "file_finder.hpp"
 
+#include <bayan/hash/hash_factory.hpp>
+
 namespace bayan {
 
 FileFinder& FileFinder::AddScanDir(const fs::path& dir_path) {
@@ -69,15 +71,21 @@ FileFinder& FileFinder::SetMinFileSize(std::uint64_t min_bytes) {
   return *this;
 }
 
+FileFinder& FileFinder::SetHashAlgorithm(HashAlgorithm algorithm) {
+  hash_algorithm_ = algorithm;
+  return *this;
+}
+
 std::vector<FileObj> FileFinder::Find() const {
   std::vector<FileObj> result;
+  HashFunction hash_function = MakeHashFunction(hash_algorithm_);
 
   for (const auto& root_path : scan_dirs_) {
     boost::system::error_code ec;
     if (!fs::exists(root_path, ec) || !fs::is_directory(root_path, ec)) {
       continue;
     }
-    ScanDirectory(root_path, result);
+    ScanDirectory(root_path, hash_function, result);
   }
 
   return result;
@@ -154,7 +162,8 @@ std::string FileFinder::WildcardToRegex(const std::string& pattern) {
   return result;
 }
 
-void FileFinder::ScanDirectory(const fs::path& root_path, std::vector<FileObj>& result) const {
+void FileFinder::ScanDirectory(const fs::path& root_path, const HashFunction& hash_function,
+                               std::vector<FileObj>& result) const {
   boost::system::error_code ec;
   fs::recursive_directory_iterator it(root_path, fs::directory_options::none, ec), end;
 
@@ -168,8 +177,8 @@ void FileFinder::ScanDirectory(const fs::path& root_path, std::vector<FileObj>& 
       }
     } else if (fs::is_regular_file(current_path, ec)) {
       if (MatchesMasks(current_path.filename().string()) && SatisfiesFileSize(current_path)) {
-        // Assuming a block size of 4096 bytes
-        result.push_back(FileObj(current_path, fs::file_size(current_path, ec), block_size_));
+        result.push_back(
+            FileObj(current_path, fs::file_size(current_path, ec), block_size_, hash_function));
       }
     }
 
