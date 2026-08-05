@@ -59,6 +59,11 @@ FileFinder& FileFinder::SetScanDepth(std::size_t depth) {
   return *this;
 }
 
+FileFinder& FileFinder::SetBlockSize(std::size_t block_size) {
+  block_size_ = block_size;
+  return *this;
+}
+
 FileFinder& FileFinder::SetMinFileSize(std::uint64_t min_bytes) {
   min_file_size_bytes_ = min_bytes;
   return *this;
@@ -151,7 +156,7 @@ std::string FileFinder::WildcardToRegex(const std::string& pattern) {
 
 void FileFinder::ScanDirectory(const fs::path& root_path, std::vector<FileObj>& result) const {
   boost::system::error_code ec;
-  fs::recursive_directory_iterator it(root_path, fs::symlink_option::none, ec), end;
+  fs::recursive_directory_iterator it(root_path, fs::directory_options::none, ec), end;
 
   while (it != end) {
     const fs::path& current_path = it->path();
@@ -164,7 +169,7 @@ void FileFinder::ScanDirectory(const fs::path& root_path, std::vector<FileObj>& 
     } else if (fs::is_regular_file(current_path, ec)) {
       if (MatchesMasks(current_path.filename().string()) && SatisfiesFileSize(current_path)) {
         // Assuming a block size of 4096 bytes
-        result.push_back(FileObj(current_path, fs::file_size(current_path, ec), 4096));
+        result.push_back(FileObj(current_path, fs::file_size(current_path, ec), block_size_));
       }
     }
 

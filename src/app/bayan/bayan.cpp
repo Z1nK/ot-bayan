@@ -7,6 +7,7 @@
 #include <bayan/version/version.hpp>
 
 #include <iostream>
+#include <format>
 
 namespace bayan {
 
@@ -103,12 +104,13 @@ void Bayan::run(int argc, char* argv[]) {
       .AddExcludeDir(options.exclude_dirs)
       .SetScanDepth(options.depth)
       .SetMinFileSize(options.min_size)
-      .AddMask(options.masks);
+      .AddMask(options.masks)
+      .SetBlockSize(options.block_size);
 
   std::vector<FileObj> files = finder.Find();
 
-  for (const auto& file : files) {
-    std::cout << "Found file: " << file.getPath().string() << std::endl;
+  for (const auto& file : files) {    
+    std::cout << std::format("Found file: {}, {}", file.getPath().string(), file.getSize()) << std::endl;
   }
 }
 

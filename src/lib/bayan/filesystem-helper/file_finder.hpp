@@ -42,6 +42,7 @@ public:
 
   // --- Settings ---
   FileFinder& SetScanDepth(std::size_t depth);
+  FileFinder& SetBlockSize(std::size_t block_size);
 
   FileFinder& SetMinFileSize(std::uint64_t min_bytes);
 
@@ -53,6 +54,7 @@ private:
   std::unordered_set<std::string> exclude_dir_names_;
   std::unordered_set<fs::path, boost::hash<fs::path>> exclude_paths_;
   std::vector<std::regex> mask_regexes_;
+  std::size_t block_size_ = 4096;
 
   std::size_t scan_depth_ = 0;
   std::uint64_t min_file_size_bytes_ = 0;
