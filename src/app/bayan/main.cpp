@@ -1,4 +1,4 @@
-#include "bayan.hpp"
+#include <bayan/bayan/bayan.hpp>
 
 #include <iostream>
 

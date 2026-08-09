@@ -2,14 +2,10 @@ add_executable(bayan)
 
 target_compile_features(bayan PUBLIC cxx_std_20)
 
-target_sources(bayan PRIVATE bayan.cpp main.cpp)
+target_sources(bayan PRIVATE main.cpp)
 
 target_link_libraries(bayan PRIVATE
-    cli-parser::cli-parser
-    bayan::project-version
-    bayan::filesystem-helper
-    bayan::duplicate-finder
-    Boost::filesystem
+    bayan::core
 )
 
 if (MSVC)
