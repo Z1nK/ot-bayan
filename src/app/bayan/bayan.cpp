@@ -132,8 +132,9 @@ void Bayan::printDuplicateGroups(const std::vector<FileObj>& files,
     //                           files[group.front()].getSize())
     //            << std::endl;
     for (size_t file_index : group) {
-      std::cout << "  " << files[file_index].getPath().string() << std::endl;
+      std::cout << "  " << files[file_index].getPath().string() << "\n";
     }
+    std::cout << "\n";
   }
 }
 
