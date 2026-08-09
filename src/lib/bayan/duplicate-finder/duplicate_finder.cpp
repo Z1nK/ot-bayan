@@ -11,8 +11,8 @@ struct HashValueHasher {
   std::size_t operator()(const HashValue& value) const {
     std::size_t seed = 0;
     for (uint32_t part : value) {
-      seed ^= std::hash<uint32_t>{}(part) + 0x9e3779b9U + (seed << 6) + (seed >> 2);      
-      // seed ^= std::hash<uint32_t>{}(part) + 0x9e3779b97f4a7c15ULL + (seed << 12) + (seed >> 4);
+      // seed ^= std::hash<uint32_t>{}(part) + 0x9e3779b9U + (seed << 6) + (seed >> 2);      
+      seed ^= std::hash<uint32_t>{}(part) + 0x9e3779b97f4a7c15ULL + (seed << 12) + (seed >> 4);
     }
     return seed;
   }
