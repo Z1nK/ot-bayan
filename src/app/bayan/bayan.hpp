@@ -1,4 +1,7 @@
 #pragma once
+#include <bayan/duplicate-finder/duplicate_finder.hpp>
+#include <bayan/filesystem-helper/file_obj.hpp>
+
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
@@ -30,6 +33,8 @@ public:
 
 private:
   void printOptions(const BayanOptions& options) const;
+  void printDuplicateGroups(const std::vector<FileObj>& files,
+                             const std::vector<DuplicateFinder::Group>& groups) const;
 };
 
 }  // namespace bayan

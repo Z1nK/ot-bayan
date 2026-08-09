@@ -97,9 +97,9 @@ void Bayan::run(int argc, char* argv[]) {
     return;
   }
 
-  printOptions(options);
+  // printOptions(options);
 
-  // TODO: Implement actual duplicate finding logic here
+  
   FileFinder finder;
   finder.AddScanDir(options.scan_dirs)
       .AddExcludeDir(options.exclude_dirs)
@@ -111,8 +111,29 @@ void Bayan::run(int argc, char* argv[]) {
 
   std::vector<FileObj> files = finder.Find();
 
-  for (const auto& file : files) {    
-    std::cout << std::format("Found file: {}, {}", file.getPath().string(), file.getSize()) << std::endl;
+  DuplicateFinder duplicate_finder;
+  std::vector<DuplicateFinder::Group> duplicate_groups = duplicate_finder.Find(files);
+
+  printDuplicateGroups(files, duplicate_groups);
+}
+
+void Bayan::printDuplicateGroups(const std::vector<FileObj>& files,
+                                  const std::vector<DuplicateFinder::Group>& groups) const {
+  if (groups.empty()) {
+    // std::cout << "No duplicates found." << std::endl;
+    return;
+  }
+
+  // std::cout << std::format("Found {} group(s) of duplicates:", groups.size()) << std::endl;
+
+  // size_t group_number = 1;
+  for (const auto& group : groups) {
+    // std::cout << std::format("Group {} ({} files, {} bytes each):", group_number++, group.size(),
+    //                           files[group.front()].getSize())
+    //            << std::endl;
+    for (size_t file_index : group) {
+      std::cout << "  " << files[file_index].getPath().string() << std::endl;
+    }
   }
 }
 

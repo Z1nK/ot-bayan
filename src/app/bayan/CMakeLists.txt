@@ -8,6 +8,7 @@ target_link_libraries(bayan PRIVATE
     cli-parser::cli-parser
     bayan::project-version
     bayan::filesystem-helper
+    bayan::duplicate-finder
     Boost::filesystem
 )
 
