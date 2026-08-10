@@ -12,7 +12,7 @@ CliParser::CliParser() : options_desc("Allowed options") {
   ("depth,d", po::value<size_t>()->default_value(0), "Scan depth (0 - current dir only)")
   ("min-size,m", po::value<uint64_t>()->default_value(1), "Minimum file size in bytes")
   ("mask", po::value<std::vector<std::string>>()->multitoken(), "Filename masks (case-insensitive)")
-  ("block-size,b", po::value<size_t>()->default_value(5), "Block size S")
+  ("block-size,b", po::value<size_t>()->default_value(4096), "Block size bytes for hashing (default: 4096)")
   ("hash", po::value<std::string>()->default_value("crc32"),"Hash algorithm (crc32, md5)")
   ("version,v", "Show version information");
 }
