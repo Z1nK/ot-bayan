@@ -38,6 +38,7 @@ BayanOptions Bayan::extractOptions(const po::variables_map& vm) {
 
   options.block_size = vm["block-size"].as<size_t>();
   options.hash_algorithm = vm["hash"].as<std::string>();
+  options.relative_paths = vm.count("relative") > 0;
 
   return options;
 }
@@ -114,11 +115,12 @@ void Bayan::run(int argc, char* argv[]) {
   DuplicateFinder duplicate_finder;
   std::vector<DuplicateFinder::Group> duplicate_groups = duplicate_finder.Find(files);
 
-  printDuplicateGroups(files, duplicate_groups);
+  printDuplicateGroups(files, duplicate_groups, options.relative_paths);
 }
 
 void Bayan::printDuplicateGroups(const std::vector<FileObj>& files,
-                                  const std::vector<DuplicateFinder::Group>& groups) const {
+                                  const std::vector<DuplicateFinder::Group>& groups,
+                                  bool relative_paths) const {
   if (groups.empty()) {
     // std::cout << "No duplicates found." << std::endl;
     return;
@@ -138,7 +140,14 @@ void Bayan::printDuplicateGroups(const std::vector<FileObj>& files,
     //                           files[group.front()].getSize())
     //            << std::endl;
     for (size_t file_index : group) {
-      std::cout << "  " << files[file_index].getPath().string() << "\n";
+      const fs::path& path = files[file_index].getPath();
+      if (relative_paths) {
+        std::cout << "  " << path.string() << "\n";
+      } else {
+        boost::system::error_code ec;
+        fs::path full_path = fs::canonical(path, ec);
+        std::cout << "  " << (ec ? fs::absolute(path) : full_path).string() << "\n";
+      }
     }
   }
 }
