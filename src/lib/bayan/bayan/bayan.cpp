@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
+#include <type_traits>
+#include <unordered_map>
 
 namespace bayan {
 
@@ -47,21 +49,8 @@ BayanOptions Bayan::extractOptions(const po::variables_map& vm) {
 
 namespace {
 
-std::string JoinPaths(const std::vector<fs::path>& paths) {
-  if (paths.empty()) {
-    return "-";
-  }
-  std::string joined;
-  for (const auto& path : paths) {
-    if (!joined.empty()) {
-      joined += ", ";
-    }
-    joined += path.string();
-  }
-  return joined;
-}
-
-std::string JoinStrings(const std::vector<std::string>& values) {
+template <typename T>
+std::string Join(const std::vector<T>& values) {
   if (values.empty()) {
     return "-";
   }
@@ -70,7 +59,11 @@ std::string JoinStrings(const std::vector<std::string>& values) {
     if (!joined.empty()) {
       joined += ", ";
     }
-    joined += value;
+    if constexpr (std::is_same_v<T, fs::path>) {
+      joined += value.string();
+    } else {
+      joined += value;
+    }
   }
   return joined;
 }
@@ -94,11 +87,11 @@ void Bayan::printOptions(const BayanOptions& options) const {
   PrintTableRow("Parameter", "Value");
   std::cout << std::string(kParamColumnWidth + kValueColumnWidth, '-') << "\n";
 
-  PrintTableRow("Scan directories", JoinPaths(options.scan_dirs));
-  PrintTableRow("Exclude directories", JoinPaths(options.exclude_dirs));
+  PrintTableRow("Scan directories", Join(options.scan_dirs));
+  PrintTableRow("Exclude directories", Join(options.exclude_dirs));
   PrintTableRow("Scan depth", std::to_string(options.depth));
   PrintTableRow("Minimum file size", std::to_string(options.min_size) + " bytes");
-  PrintTableRow("File masks", JoinStrings(options.masks));
+  PrintTableRow("File masks", Join(options.masks));
   PrintTableRow("Block size", std::to_string(options.block_size));
   PrintTableRow("Hash algorithm", options.hash_algorithm);
   PrintTableRow("Relative paths", options.relative_paths ? "yes" : "no");
