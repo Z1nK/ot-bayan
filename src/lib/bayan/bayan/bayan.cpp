@@ -168,12 +168,20 @@ void Bayan::printDuplicateGroups(const std::vector<FileObj>& files,
     std::cout << "Found " << groups.size() << " group(s) of duplicates:\n";
   }
 
+  std::unordered_map<size_t, std::string> resolved_paths;
+  auto getResolvedPath = [&](size_t file_index) -> const std::string& {
+    auto [it, inserted] = resolved_paths.try_emplace(file_index);
+    if (inserted) {
+      it->second = resolvePath(files[file_index].getPath(), options.relative_paths);
+    }
+    return it->second;
+  };
+
   int path_column_width = kValueColumnWidth;
   if (options.verbose) {
     for (const auto& group : groups) {
       for (size_t file_index : group) {
-        int path_length = static_cast<int>(
-            resolvePath(files[file_index].getPath(), options.relative_paths).size());
+        int path_length = static_cast<int>(getResolvedPath(file_index).size());
         path_column_width = std::max(path_column_width, path_length + 2);
       }
     }
@@ -193,13 +201,12 @@ void Bayan::printDuplicateGroups(const std::vector<FileObj>& files,
       PrintTableRow("Path", "Size (bytes)", path_column_width);
       std::cout << std::string(path_column_width + kValueColumnWidth, '-') << "\n";
       for (size_t file_index : group) {
-        PrintTableRow(resolvePath(files[file_index].getPath(), options.relative_paths),
-                      std::to_string(files[file_index].getSize()), path_column_width);
+        PrintTableRow(getResolvedPath(file_index), std::to_string(files[file_index].getSize()),
+                      path_column_width);
       }
     } else {
       for (size_t file_index : group) {
-        std::cout << "  " << resolvePath(files[file_index].getPath(), options.relative_paths)
-                   << "\n";
+        std::cout << "  " << getResolvedPath(file_index) << "\n";
       }
     }
   }
