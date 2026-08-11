@@ -175,7 +175,8 @@ void FileFinder::ScanDirectory(const fs::path& root_path, const HashFunction& ha
       if (IsExcludedDir(current_path) || current_depth >= scan_depth_) {
         it.disable_recursion_pending();
       }
-    } else if (fs::is_regular_file(current_path, ec)) {
+      // !TODO think what to do with simlinks, exclude simlinks for now.
+    } else if (!fs::is_symlink(current_path, ec) && fs::is_regular_file(current_path, ec)) {
       if (MatchesMasks(current_path.filename().string()) && SatisfiesFileSize(current_path)) {
         result.push_back(
             FileObj(current_path, fs::file_size(current_path, ec), block_size_, hash_function));
