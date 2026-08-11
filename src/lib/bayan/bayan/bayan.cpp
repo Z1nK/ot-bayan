@@ -149,7 +149,12 @@ std::string Bayan::resolvePath(const fs::path& path, bool relative_paths) {
 
   boost::system::error_code ec;
   fs::path full_path = fs::canonical(path, ec);
-  return (ec ? fs::absolute(path) : full_path).string();
+  if (!ec) {
+    return full_path.string();
+  }
+
+  full_path = fs::absolute(path, ec);
+  return (ec ? path : full_path).string();
 }
 
 void Bayan::printDuplicateGroups(const std::vector<FileObj>& files,
