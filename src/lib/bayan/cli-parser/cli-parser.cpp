@@ -15,6 +15,7 @@ CliParser::CliParser() : options_desc("Allowed options") {
   ("block-size,b", po::value<size_t>()->default_value(4096), "Block size bytes for hashing (default: 4096)")
   ("hash", po::value<std::string>()->default_value("crc32"),"Hash algorithm (crc32, md5)")
   ("relative,r", "Print paths as passed (relative) instead of full paths")
+  ("verbose,V", "Verbose output: print used parameters and a table with file paths and sizes")
   ("version,v", "Show version information");
 }
 

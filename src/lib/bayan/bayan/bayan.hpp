@@ -24,6 +24,7 @@ struct BayanOptions {
   std::string hash_algorithm;
   bool show_help;
   bool relative_paths;
+  bool verbose;
 };
 
 class Bayan {
@@ -36,7 +37,8 @@ private:
   void printOptions(const BayanOptions& options) const;
   void printDuplicateGroups(const std::vector<FileObj>& files,
                              const std::vector<DuplicateFinder::Group>& groups,
-                             bool relative_paths) const;
+                             const BayanOptions& options) const;
+  static std::string resolvePath(const fs::path& path, bool relative_paths);
 };
 
 }  // namespace bayan
