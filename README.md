@@ -13,6 +13,8 @@ It scans one or more directories, filters candidate files, and groups files with
 - Configurable block size for hashing
 - Two hash backends: `crc32` and `md5`
 - Duplicate grouping by content, not by file name
+- Verbose mode with a parameter summary and a per-group file/size table
+- Print paths as full (canonical) by default, or as-passed with `--relative`
 
 ## Requirements
 
@@ -65,16 +67,18 @@ Note: if `WITH_GOOGLE_TEST` is `OFF` in your existing CMake cache, tests are not
 ### Find duplicates in a directory
 
 ```bash
-./build/bin/bayan --scan test-dir --depth 5 --min-size 1
+./build/bin/bayan --scan test-dir --depth 5 --min-size 1 --relative
 ```
 
 Example output:
 
 ```text
-	test-dir/subdir1/sub-sub-dir/subsub.md
-	test-dir/subdir2/subsub.md
-	test-dir/subdir2/sub2.md
+  test-dir/subdir1/sub-sub-dir/subsub.md
+  test-dir/subdir2/subsub.md
+  test-dir/subdir2/sub2.md
 ```
+
+Note: by default paths are printed fully resolved (canonical); pass `--relative` to print them as given on the command line.
 
 ## CLI Reference
 
@@ -89,6 +93,8 @@ Current options:
 	--mask arg                      Filename masks (case-insensitive)
 	-b [ --block-size ] arg (=4096) Block size bytes for hashing (default: 4096)
 	--hash arg (=crc32)             Hash algorithm (crc32, md5)
+	-r [ --relative ]               Print paths as passed (relative) instead of full paths
+	-V [ --verbose ]                Verbose output: print used parameters and a table with file paths and sizes
 	-v [ --version ]                Show version information
 ```
 
@@ -130,6 +136,18 @@ Current options:
 	--block-size 8192 \
 	--depth 8
 ```
+
+### 5) Verbose output with relative paths
+
+```bash
+./build/bin/bayan \
+	--scan /data \
+	--depth 8 \
+	--relative \
+	--verbose
+```
+
+Verbose mode prints the resolved parameters and, for each duplicate group, a table of file paths and sizes instead of a plain path list.
 
 ## How It Works
 
@@ -177,7 +195,8 @@ Key components:
 	- Validates required inputs
 	- Configures `FileFinder`
 	- Runs `DuplicateFinder`
-	- Prints duplicate groups
+	- Prints duplicate groups (plain list, or a table with sizes in verbose mode)
+	- Resolves printed paths as canonical (default) or as-passed (`--relative`)
 
 - `FileFinder`
 	- Walks scan roots recursively
@@ -221,3 +240,4 @@ cpack --config build/CPackConfig.cmake
 - If no duplicates are found, output is empty.
 - `--scan` is required.
 - `--depth 0` scans only the top-level of each scan directory.
+- Printed paths are fully resolved (canonical) by default; use `--relative` to print them as passed.
