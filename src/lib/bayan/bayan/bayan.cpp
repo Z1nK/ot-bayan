@@ -169,7 +169,7 @@ void Bayan::printDuplicateGroups(const std::vector<FileObj>& files,
   }
 
   std::unordered_map<size_t, std::string> resolved_paths;
-  auto getResolvedPath = [&](size_t file_index) -> const std::string& {
+  auto getResolvedPath = [&resolved_paths, &files, &options](size_t file_index) -> const std::string& {
     auto [it, inserted] = resolved_paths.try_emplace(file_index);
     if (inserted) {
       it->second = resolvePath(files[file_index].getPath(), options.relative_paths);
